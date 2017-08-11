@@ -49,9 +49,9 @@ namespace TrainingLogin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (user.Password == "123456")
+                if (GroupOfUsers.Users.Any(n => n.Username == user.Username && n.Password == user.Password))
                 {
-                    Session["UserId"] = 1010;
+                    Session["UserName"] = user.Username;
                     return RedirectToAction("UserDashBoard");
                 }
             }
@@ -60,18 +60,41 @@ namespace TrainingLogin.Controllers
 
         public ActionResult UserDashBoard()
         {
-            if (Session["UserId"] != null)
+            if (Session["UserName"] != null)
             {
                 User a = new User();
-                
-                a.Id = Int32.Parse(Session["UserId"].ToString());
+
+                a.Username = Session["UserName"].ToString();
 
                 return View(a);
             }
             else
             {
-                return RedirectToAction("Login");
+                return RedirectToAction("UserDashBoard");
             }
         }
+
+        public ActionResult Register()
+        {
+            if (Session["UserId"] != null)
+            {
+                return RedirectToAction("Login");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(User user)
+        {
+            if(ModelState.IsValid)
+            {
+                GroupOfUsers.Users.Add(user);
+             
+                return RedirectToAction("Login");
+            }
+            return View();
+        }
+
     }
 }

@@ -7,7 +7,7 @@ namespace TrainingLogin.Models
 {
     public class GroupOfUsers
     {
-        public List<User> Users { get; set; }
+        public static List<User> Users { get; set; } = new List<User>();
         public GroupOfUsers()
         {
             Users = new List<User>();
