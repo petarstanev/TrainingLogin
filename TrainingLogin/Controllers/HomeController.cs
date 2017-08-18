@@ -43,6 +43,12 @@ namespace TrainingLogin.Controllers
             return View();
         }
 
+        public ActionResult Logout()
+        {
+            Session["UserName"] = null;
+            return RedirectToAction(String.Empty);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(User user)
@@ -96,5 +102,14 @@ namespace TrainingLogin.Controllers
             return View();
         }
 
+        public PartialViewResult LoginHeaderView()
+        {
+            if (Session["UserName"] != null)
+            {
+                return PartialView(LoginStatus.Login);
+            }
+
+            return PartialView(LoginStatus.Logout);
+        }
     }
 }
